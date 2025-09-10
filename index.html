@@ -1,0 +1,170 @@
+# finale
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disaster Alert Wristband Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+
+    header {
+      background: #d9534f;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .section {
+      background: white;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .alert {
+      background-color: #f2dede;
+      color: #a94442;
+      padding: 10px;
+      border-left: 5px solid #d9534f;
+      margin-bottom: 10px;
+      border-radius: 3px;
+    }
+
+    .wristband {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .help-button {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .status {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.8em;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Wristband Alert System - Disaster Dashboard</h1>
+</header>
+
+<div class="container">
+
+  <div class="section" id="alerts-section">
+    <h2>Live Disaster Alerts</h2>
+    <div id="alerts"></div>
+  </div>
+
+  <div class="section">
+    <h2>Connected Wristbands</h2>
+    <div id="wristbands"></div>
+  </div>
+
+</div>
+
+<div class="footer">© 2025 Tourist Alert Network</div>
+
+<script>
+  // Mock wristbands
+  const wristbands = [
+    { id: 'WB001', user: 'Alice - Tourist', location: 'Zone A', battery: 80, active: true },
+    { id: 'WB002', user: 'Bob - Hiker', location: 'Zone B', battery: 55, active: false },
+    { id: 'WB003', user: 'Carlos - Camper', location: 'Zone C', battery: 90, active: true }
+  ];
+
+  const alertsEl = document.getElementById('alerts');
+  const wristbandsEl = document.getElementById('wristbands');
+
+  // Simulate disaster alert
+  function sendDisasterAlert(type, zone) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert';
+    alertDiv.innerHTML = <strong>${type} Alert!</strong> Detected in ${zone}.;
+    alertsEl.prepend(alertDiv);
+
+    // Simulate auto-help for inactive users in the zone
+    wristbands.forEach(wb => {
+      if (wb.location === zone && !wb.active) {
+        console.log(Auto-help triggered for ${wb.user});
+        autoHelp(wb.user);
+      }
+    });
+  }
+
+  // Render wristbands
+  function renderWristbands() {
+    wristbandsEl.innerHTML = '';
+    wristbands.forEach(wb => {
+      const wbDiv = document.createElement('div');
+      wbDiv.className = 'wristband';
+      wbDiv.innerHTML = `
+        <div>
+          <strong>${wb.user}</strong><br>
+          <span class="status">
+            ID: ${wb.id} | Location: ${wb.location} | Battery: ${wb.battery}% | Status: ${wb.active ? 'Active' : 'Inactive'}
+          </span>
+        </div>
+        <button class="help-button" onclick="manualHelp('${wb.user}')">Call for Help</button>
+      `;
+      wristbandsEl.appendChild(wbDiv);
+    });
+  }
+
+  function manualHelp(user) {
+    alert(Help request sent for ${user}.);
+    console.log(Manual help triggered for ${user});
+  }
+
+  function autoHelp(user) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert';
+    alertDiv.innerHTML = 🆘 <strong>Auto Help Sent:</strong> ${user} could not respond.;
+    alertsEl.prepend(alertDiv);
+  }
+
+  // Initial render
+  renderWristbands();
+
+  // Simulate alerts every 15 seconds
+  setInterval(() => {
+    const disasters = ['Earthquake', 'Flood', 'Landslide'];
+    const zones = ['Zone A', 'Zone B', 'Zone C'];
+    const randDisaster = disasters[Math.floor(Math.random() * disasters.length)];
+    const randZone = zones[Math.floor(Math.random() * zones.length)];
+    sendDisasterAlert(randDisaster, randZone);
+  }, 15000);
+</script>
+
+</body>
+</html>
